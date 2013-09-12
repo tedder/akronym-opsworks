@@ -30,4 +30,4 @@ node[:deploy].each do |application, deploy|
     group "root"
     mode 0644
   end
-
+end
