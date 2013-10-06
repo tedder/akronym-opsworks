@@ -1,7 +1,7 @@
 #json->[:deploy][:akronym_erlang_code][:scm][:repository]
 #json->[:deploy][:akronym_erlang_code][:deploy_to]
 
-#include_recipe 'deploy'
+include_recipe 'deploy'
 
 node[:deploy].each do |application, deploy|
   if deploy[:akronym_app_type] != 'erlang-runner'
