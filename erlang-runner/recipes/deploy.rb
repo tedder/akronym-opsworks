@@ -4,14 +4,11 @@
 #include_recipe 'deploy'
 
 node[:deploy].each do |application, deploy|
-  apptype = deploy[:application_type]
-  Chef::Log.debug("hello world! app: #{application} / node: #{deploy}")
-  Chef::Log.debug("hello world! app: #{application} / node: #{deploy.to_json}")
-  if deploy[:application_type] != 'other'
-    Chef::Log.debug("only deploying 'other' apps, which doesn't include this: #{application} because its type == #{apptype}")
+  if deploy[:akronym_app_type] != 'erlang-runner'
+    Chef::Log.debug("only deploying 'erlang-runner' apps, which doesn't include this: #{application} because its type == #{deploy[:akronym_app_type]}")
     next
   end
-  Chef::Log.debug("yep, deploying app: #{application} with type == #{apptype}")
+  Chef::Log.debug("yep, deploying app == #{application} with config == #{deploy.to_json}")
 
   #opsworks_deploy_user
   opsworks_deploy_dir do
