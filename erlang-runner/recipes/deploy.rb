@@ -5,7 +5,7 @@
 
 node[:deploy].each do |application, deploy|
   apptype = deploy[:application_type]
-  Chef::Log.debug("hello world! app: #{application} / #{deploy.flatten}")
+  Chef::Log.debug("hello world! app: #{application} / node: #{deploy}")
   if deploy[:application_type] != 'other'
     Chef::Log.debug("only deploying 'other' apps, which doesn't include this: #{application} because its type == #{apptype}")
     next
