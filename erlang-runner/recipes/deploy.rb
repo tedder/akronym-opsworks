@@ -21,10 +21,11 @@ node[:deploy].each do |application, deploy|
     #command "aws s3 sync s3://akronym-internal/
   # Source accepts the protocol s3:// with the host as the bucket
   # access_key_id and secret_access_key are just that
-  Chef::Log.debug("gonna do a deploy from #{deploy[:deploy_to]} to #{deploy[:scm][:repository]}")
+  Chef::Log.debug("gonna do a deploy from #{deploy[:deploy_to]}")
+  Chef::Log.debug("headed to #{deploy[:s3_source]}")
   s3_file deploy[:deploy_to] do
     #source "s3://your.bucket/the_file.tar.gz"
-    source deploy[:scm][:repository]
+    source deploy[:s3_source]
     #access_key_id your_key
     #secret_access_key your_secret
     owner "root"
