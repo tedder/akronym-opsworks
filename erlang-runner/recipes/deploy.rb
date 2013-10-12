@@ -26,14 +26,15 @@ node[:deploy].each do |application, deploy|
 
 	ensure_scm_package_installed('s3')
 	repo = prepare_s3_checkouts(deploy[:s3_source])
-	deploy[:scm] = {
-		:scm_type => 'git',
-		:repository => repo
-	}
+	#deploy[:scm] = {
+		#:scm_type => 'git',
+		#:repository => repo
+	#}
 
 	scm "download code" do
 		action :checkout
 		destination deploy[:deploy_to]
+		repository repo
 	end
 
   #s3_file deploy[:deploy_to] do
