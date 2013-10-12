@@ -23,13 +23,21 @@ node[:deploy].each do |application, deploy|
   # access_key_id and secret_access_key are just that
   Chef::Log.debug("gonna do a deploy from #{deploy[:deploy_to]}")
   Chef::Log.debug("headed to #{deploy[:s3_source]}")
-  s3_file deploy[:deploy_to] do
-    #source "s3://your.bucket/the_file.tar.gz"
-    source deploy[:s3_source]
+
+	repo = prepare_s3_checkouts(deploy[:s3_source])
+
+	scm "download code" do
+		action :checkout
+		destination deploy[:deploy_to]
+	end
+
+  #s3_file deploy[:deploy_to] do
+    ##source "s3://your.bucket/the_file.tar.gz"
+    #source deploy[:s3_source]
     #access_key_id your_key
     #secret_access_key your_secret
-    owner "root"
-    group "root"
-    mode 0644
-  end
+    #owner "root"
+    #group "root"
+    #mode 0644
+  #end
 end
