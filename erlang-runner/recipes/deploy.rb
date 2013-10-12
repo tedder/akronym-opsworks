@@ -21,11 +21,15 @@ node[:deploy].each do |application, deploy|
     #command "aws s3 sync s3://akronym-internal/
   # Source accepts the protocol s3:// with the host as the bucket
   # access_key_id and secret_access_key are just that
-  Chef::Log.debug("gonna do a deploy from #{deploy[:deploy_to]}")
-  Chef::Log.debug("headed to #{deploy[:s3_source]}")
+  Chef::Log.debug("gonna do a deploy from #{deploy[:s3_source]}")
+  Chef::Log.debug("headed to #{deploy[:deploy_to]}")
 
 	ensure_scm_package_installed('s3')
 	repo = prepare_s3_checkouts(deploy[:s3_source])
+	deploy[:scm] = {
+		:scm_type => 'git',
+		:repository => repo
+	}
 
 	scm "download code" do
 		action :checkout
