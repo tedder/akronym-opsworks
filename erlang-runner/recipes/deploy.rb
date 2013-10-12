@@ -24,6 +24,7 @@ node[:deploy].each do |application, deploy|
   Chef::Log.debug("gonna do a deploy from #{deploy[:deploy_to]}")
   Chef::Log.debug("headed to #{deploy[:s3_source]}")
 
+	ensure_scm_package_installed('s3')
 	repo = prepare_s3_checkouts(deploy[:s3_source])
 
 	scm "download code" do

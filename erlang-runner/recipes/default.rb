@@ -10,6 +10,7 @@ package 'mosh'
 #package 'python'
 package 'libssl0.9.8'
 package 'erlang'
+#package 'libdigest-hmac-perl' # this is hacky, but needed for scm_helper in opsworks/s3curl.pl
 
 
 #python/pip tips
