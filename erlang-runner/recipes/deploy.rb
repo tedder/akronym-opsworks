@@ -28,6 +28,7 @@ node[:deploy].each do |application, deploy|
 	key2 = creds["AccessKeyId"]
 	secret = creds[:SecretAccessKey]
   Chef::Log.debug("key: #{key} key2: #{key2} secret: #{secret}")
+	creds.keys.each { |k| puts "#{k}: #{creds[k]}" }
 
 
   #execute "deployapp" do
