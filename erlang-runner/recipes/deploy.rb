@@ -17,6 +17,14 @@ node[:deploy].each do |application, deploy|
     path deploy[:deploy_to]
   end
 
+	# get our IAM keys
+  Chef::Log.debug("prepping for restful")
+	client = Chef::REST.new('http://169.254.169.254/', 'metadata', nil)
+	iam_user = client.get_rest('/latest/meta-data/iam/security-credentials/')
+
+  Chef::Log.debug("we have our iam user: #{iam_user}")
+
+
   #execute "deployapp" do
     #command "aws s3 sync s3://akronym-internal/
   # Source accepts the protocol s3:// with the host as the bucket
