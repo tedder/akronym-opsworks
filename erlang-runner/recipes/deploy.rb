@@ -19,9 +19,9 @@ node[:deploy].each do |application, deploy|
 
 	# get our IAM keys
   Chef::Log.debug("prepping for restful")
-	client = Chef::REST.new('http://169.254.169.254/', 'metadata', nil)
-	iam_user = client.get_rest('/latest/meta-data/iam/security-credentials/')
-	creds = client.get_rest('/latest/meta-data/iam/security-credentials/#{iam_user}')
+	client = Chef::REST.new('http://169.254.169.254', 'metadata', nil)
+	iam_user = client.get_rest("latest/meta-data/iam/security-credentials/")
+	creds = client.get_rest("latest/meta-data/iam/security-credentials/#{iam_user}")
 
   Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds}")
 	key = creds[:AccessKeyId]
