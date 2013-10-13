@@ -31,6 +31,13 @@ node[:deploy].each do |application, deploy|
 		#:repository => repo
 	#}
 
+
+  Chef::Log.debug("deploy time: #{repo}")
+	deploy deploy[:deploy_to] do
+		repository repo
+	end
+
+  Chef::Log.debug("scm time: #{repo}")
 	scm "download code" do
 		action :checkout
 		destination deploy[:deploy_to]
