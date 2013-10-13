@@ -23,12 +23,12 @@ node[:deploy].each do |application, deploy|
 	iam_user = client.get_rest("latest/meta-data/iam/security-credentials/")
 	creds = client.get_rest("latest/meta-data/iam/security-credentials/#{iam_user}")
 
-  Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds}")
+  Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds} type: #{creds.type}")
 	key = creds[:AccessKeyId]
 	key2 = creds["AccessKeyId"]
 	secret = creds[:SecretAccessKey]
   Chef::Log.debug("key: #{key} key2: #{key2} secret: #{secret}")
-	creds.keys.each { |k| puts "#{k}: #{creds[k]}" }
+	creds.keys.each { |k| Chef::Log.debug("#{k}: #{creds[k]}") }
 
 
   #execute "deployapp" do
