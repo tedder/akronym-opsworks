@@ -25,7 +25,7 @@ node[:deploy].each do |application, deploy|
   Chef::Log.debug("headed to #{deploy[:deploy_to]}")
 
 	ensure_scm_package_installed('s3')
-	repo = prepare_s3_checkouts(deploy[:s3_source])
+	repo = prepare_s3_checkouts(:repository => deploy[:s3_source])
 	#deploy[:scm] = {
 		#:scm_type => 'git',
 		#:repository => repo
