@@ -32,16 +32,16 @@ node[:deploy].each do |application, deploy|
 	#}
 
 
-  Chef::Log.debug("deploy time: #{repo}")
+  Chef::Log.debug("deploy time: #{repo} and #{deploy[:s3_source]}")
 	deploy deploy[:deploy_to] do
-		repository repo
+		repository deploy[:s3_source]
 	end
 
-  Chef::Log.debug("scm time: #{repo}")
+  Chef::Log.debug("scm time: #{repo} and #{deploy[:s3_source]}")
 	scm "download code" do
 		action :checkout
 		destination deploy[:deploy_to]
-		repository repo
+		repository deploy[:s3_source]
 	end
 
   #s3_file deploy[:deploy_to] do
