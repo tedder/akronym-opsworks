@@ -2,6 +2,7 @@
 #json->[:deploy][:akronym_erlang_code][:deploy_to]
 
 include_recipe 'deploy'
+require 'json'
 
 node[:deploy].each do |application, deploy|
   if deploy[:akronym_app_type] != 'erlang-runner'
@@ -21,7 +22,7 @@ node[:deploy].each do |application, deploy|
   Chef::Log.debug("prepping for restful")
 	client = Chef::REST.new('http://169.254.169.254', 'metadata', nil)
 	iam_user = client.get_rest("latest/meta-data/iam/security-credentials/")
-	creds = client.get_rest("latest/meta-data/iam/security-credentials/#{iam_user}")
+	creds = JSON.parse(client.get_rest("latest/meta-data/iam/security-credentials/#{iam_user}"), :create_additions => false)
 
   Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds} type: #{creds.type}")
 	key = creds[:AccessKeyId]
