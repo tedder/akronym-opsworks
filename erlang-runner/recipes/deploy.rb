@@ -45,7 +45,7 @@ node[:deploy].each do |application, deploy|
 		#:repository => repo
 	#}
 
-
+	repo = "xx"
   Chef::Log.debug("deploy time: #{repo} and #{deploy[:s3_source]}")
 	python "deploycode" do
 		code """
