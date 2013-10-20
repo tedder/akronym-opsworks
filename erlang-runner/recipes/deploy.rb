@@ -29,7 +29,7 @@ node[:deploy].each do |application, deploy|
 	key2 = creds["AccessKeyId"]
 	secret = creds[:SecretAccessKey]
   Chef::Log.debug("key: #{key} key2: #{key2} secret: #{secret}")
-	creds.keys.each { |k| Chef::Log.debug("#{k}: #{creds[k]}") }
+	creds.keys.each { |k| Chef::Log.debug("kk: #{k}: #{creds[k]}") }
 
 
   #execute "deployapp" do
@@ -40,7 +40,7 @@ node[:deploy].each do |application, deploy|
   Chef::Log.debug("headed to #{deploy[:deploy_to]}")
 
 	ensure_scm_package_installed('s3')
-	repo = prepare_s3_checkouts(:repository => deploy[:s3_source])
+	repo = prepare_s3_checkouts(:repository => deploy[:s3_source], :user => key, :password => secret)
 	#deploy[:scm] = {
 		#:scm_type => 'git',
 		#:repository => repo
