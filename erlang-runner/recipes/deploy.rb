@@ -26,9 +26,8 @@ node[:deploy].each do |application, deploy|
 
   Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds} type: #{creds.type}")
 	key = creds["AccessKeyId"]
-	key2 = creds["AccessKeyId"]
 	secret = creds["SecretAccessKey"]
-  Chef::Log.debug("key: #{key} key2: #{key2} secret: #{secret}")
+  Chef::Log.debug("key: #{key} secret: #{secret}")
 	creds.keys.each { |k| Chef::Log.debug("kk: #{k}: #{creds[k]}") }
 
 
@@ -48,16 +47,26 @@ node[:deploy].each do |application, deploy|
 
 
   Chef::Log.debug("deploy time: #{repo} and #{deploy[:s3_source]}")
-	deploy deploy[:deploy_to] do
-		repository deploy[:s3_source]
+	python "deploycode" do
+		code """
+import boto
+s3 = boto.connect_s3()
+bucket = s3.get_bucket('akronym-internal')
+key = bucket.get_key('akronym-prod.tgz')
+deploy = key.get_contents_to_filename('#{deploy[:deploy_to]}')
+print \"deploy foo: %s\" % deploy
+"""
 	end
+	#deploy deploy[:deploy_to] do
+		#repository deploy[:s3_source]
+	#end
 
-  Chef::Log.debug("scm time: #{repo} and #{deploy[:s3_source]}")
-	scm "download code" do
-		action :checkout
-		destination deploy[:deploy_to]
-		repository deploy[:s3_source]
-	end
+  #Chef::Log.debug("scm time: #{repo} and #{deploy[:s3_source]}")
+	#scm "download code" do
+		#action :checkout
+		#destination deploy[:deploy_to]
+		#repository deploy[:s3_source]
+	#end
 
   #s3_file deploy[:deploy_to] do
     ##source "s3://your.bucket/the_file.tar.gz"
