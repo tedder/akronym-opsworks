@@ -25,9 +25,9 @@ node[:deploy].each do |application, deploy|
 	creds = JSON.parse(client.get_rest("latest/meta-data/iam/security-credentials/#{iam_user}"), :create_additions => false)
 
   Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds} type: #{creds.type}")
-	key = creds[:AccessKeyId]
+	key = creds["AccessKeyId"]
 	key2 = creds["AccessKeyId"]
-	secret = creds[:SecretAccessKey]
+	secret = creds["SecretAccessKey"]
   Chef::Log.debug("key: #{key} key2: #{key2} secret: #{secret}")
 	creds.keys.each { |k| Chef::Log.debug("kk: #{k}: #{creds[k]}") }
 
