@@ -37,8 +37,10 @@ node[:deploy].each do |application, deploy|
 	execute "foo" do
 		cwd deploy[:deploy_to]
 		command """
+/opt/akronym4/rel/akronym/package/bin/akronym stop
 aws s3 --region=us-west-2 cp s3://akronym-internal/akronym-prod.tgz #{deploy[:deploy_to]}
 tar -zxvf #{deploy[:deploy_to]}/akronym-prod.tgz
+/opt/akronym4/rel/akronym/package/bin/akronym start
 """
 	end
 

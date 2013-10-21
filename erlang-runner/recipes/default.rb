@@ -21,3 +21,8 @@ include_recipe 'python'
   python_pip "#{pkg}"
 end
 
+#service "akronym-runner" do
+#action :nothing
+#
+#supports :restart => true, :start => true, :stop => true
+# /opt/akronym4/rel/akronym/package/bin/akronym
