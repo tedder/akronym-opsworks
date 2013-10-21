@@ -18,9 +18,7 @@ package 'erlang'
 include_recipe 'python'
 
 %w(boto awscli).each do |pkg|
-	action :upgrade
+	action :install
   python_pip "#{pkg}"
 end
-
-
 

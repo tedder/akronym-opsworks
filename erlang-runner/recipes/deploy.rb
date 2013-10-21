@@ -33,20 +33,13 @@ node[:deploy].each do |application, deploy|
 
   Chef::Log.debug("deploy time: #{deploy[:s3_source]}")
   Chef::Log.debug("headed to #{deploy[:deploy_to]}")
-	python "deploycode" do
-		code """
-import boto
-s3 = boto.connect_s3()
-bucket = s3.get_bucket('akronym-internal')
-key = bucket.get_key('akronym-prod.tgz')
-deploy = key.get_contents_to_filename('#{deploy[:deploy_to]}/akronym-prod.tgz')
-print \"deploy foo: %s\" % deploy
-"""
-	end
 
-	execute "untar" do
+	execute "foo" do
 		cwd deploy[:deploy_to]
-		command "tar -zxvf #{deploy[:deploy_to]}/akronym-prod.tgz"
+		command """
+aws s3 cp #{deploy[:deploy_to]}/akronym-prod.tgz #{deploy[:deploy_to]}
+tar -zxvf #{deploy[:deploy_to]}/akronym-prod.tgz
+"""
 	end
 
 end
