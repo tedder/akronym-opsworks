@@ -19,62 +19,34 @@ node[:deploy].each do |application, deploy|
   end
 
 	# get our IAM keys
-  Chef::Log.debug("prepping for restful")
-	client = Chef::REST.new('http://169.254.169.254', 'metadata', nil)
-	iam_user = client.get_rest("latest/meta-data/iam/security-credentials/")
-	creds = JSON.parse(client.get_rest("latest/meta-data/iam/security-credentials/#{iam_user}"), :create_additions => false)
+  #Chef::Log.debug("prepping for restful")
+	#client = Chef::REST.new('http://169.254.169.254', 'metadata', nil)
+	#iam_user = client.get_rest("latest/meta-data/iam/security-credentials/")
+	#creds = JSON.parse(client.get_rest("latest/meta-data/iam/security-credentials/#{iam_user}"), :create_additions => false)
 
-  Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds} type: #{creds.type}")
-	key = creds["AccessKeyId"]
-	secret = creds["SecretAccessKey"]
-  Chef::Log.debug("key: #{key} secret: #{secret}")
-	creds.keys.each { |k| Chef::Log.debug("kk: #{k}: #{creds[k]}") }
+  #Chef::Log.debug("we have our iam user: #{iam_user} and creds: #{creds} type: #{creds.type}")
+	#key = creds["AccessKeyId"]
+	#secret = creds["SecretAccessKey"]
+  #Chef::Log.debug("key: #{key} secret: #{secret}")
+	#creds.keys.each { |k| Chef::Log.debug("kk: #{k}: #{creds[k]}") }
 
 
-  #execute "deployapp" do
-    #command "aws s3 sync s3://akronym-internal/
-  # Source accepts the protocol s3:// with the host as the bucket
-  # access_key_id and secret_access_key are just that
-  Chef::Log.debug("gonna do a deploy from #{deploy[:s3_source]}")
+  Chef::Log.debug("deploy time: #{deploy[:s3_source]}")
   Chef::Log.debug("headed to #{deploy[:deploy_to]}")
-
-	#ensure_scm_package_installed('s3')
-	#repo = prepare_s3_checkouts(:repository => deploy[:s3_source], :user => key, :password => secret)
-	#deploy[:scm] = {
-		#:scm_type => 'git',
-		#:repository => repo
-	#}
-
-	repo = "xx"
-  Chef::Log.debug("deploy time: #{repo} and #{deploy[:s3_source]}")
 	python "deploycode" do
 		code """
 import boto
 s3 = boto.connect_s3()
 bucket = s3.get_bucket('akronym-internal')
 key = bucket.get_key('akronym-prod.tgz')
-deploy = key.get_contents_to_filename('#{deploy[:deploy_to]}')
+deploy = key.get_contents_to_filename('#{deploy[:deploy_to]}/akronym-prod.tgz')
 print \"deploy foo: %s\" % deploy
 """
 	end
-	#deploy deploy[:deploy_to] do
-		#repository deploy[:s3_source]
-	#end
 
-  #Chef::Log.debug("scm time: #{repo} and #{deploy[:s3_source]}")
-	#scm "download code" do
-		#action :checkout
-		#destination deploy[:deploy_to]
-		#repository deploy[:s3_source]
-	#end
+	execute "untar" do
+		cwd deploy[:deploy_to]
+		command "tar -zxvf #{deploy[:deploy_to]}/akronym-prod.tgz"
+	end
 
-  #s3_file deploy[:deploy_to] do
-    ##source "s3://your.bucket/the_file.tar.gz"
-    #source deploy[:s3_source]
-    #access_key_id your_key
-    #secret_access_key your_secret
-    #owner "root"
-    #group "root"
-    #mode 0644
-  #end
 end
