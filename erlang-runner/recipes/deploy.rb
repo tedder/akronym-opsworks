@@ -37,7 +37,7 @@ node[:deploy].each do |application, deploy|
 	execute "foo" do
 		cwd deploy[:deploy_to]
 		command """
-aws s3 cp #{deploy[:deploy_to]}/akronym-prod.tgz #{deploy[:deploy_to]}
+aws s3 --region=us-west-2 cp #{deploy[:deploy_to]}/akronym-prod.tgz #{deploy[:deploy_to]}
 tar -zxvf #{deploy[:deploy_to]}/akronym-prod.tgz
 """
 	end
